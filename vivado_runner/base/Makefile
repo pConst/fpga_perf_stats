@@ -6,12 +6,11 @@
 
 PROJ = test
 
-# selecting largest pin count part in the family
+# expecting this part will be overriden
 PART = xc7s100fgga676-2
 
 SRCS = src/main.sv \
-       src/define.vh \
-       src/fast_counter.sv
+       src/dut.sv
 
 XDCS = src/timing.xdc
 
@@ -26,10 +25,9 @@ all: setup compile
 info:
 	echo -e \\n '    Project name: ' $(PROJ) \
 	        \\n '    Part:         ' $(PART) \
-		 \\n '    Sources:      ' $(SRCS) \
-		 \\n '    Constraints:  ' $(XDCS) \
-		 \\n '    Scripts:      ' $(SCRIPTS)
-
+			\\n '    Sources:      ' $(SRCS) \
+			\\n '    Constraints:  ' $(XDCS) \
+			\\n '    Scripts:      ' $(SCRIPTS)
 
 setup: .setup.done
 
@@ -49,12 +47,10 @@ setup: .setup.done
 	rm -f .xdcs
 	rm -f .scripts
 
-
 compile: .compile.done
 
 .compile.done: .setup.done
 	vivado -mode batch -source scripts/compile_vivado.tcl
-
 
 clean:
 	$(shell ./clean_vivado.sh )

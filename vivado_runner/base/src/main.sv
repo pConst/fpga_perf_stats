@@ -1,74 +1,33 @@
-//------------------------------------------------------------------------------
-// Fast counter test project
-// published as part of https://github.com/pConst/basic_verilog
-// Konstantin Pavlov, pavlovconst@gmail.com
-//------------------------------------------------------------------------------
 
-`include "define.vh"
-
-module main(
-
-  input clk1,
-  input nrst1,
-
-  input set1,
-  input [`WIDTH-1:0] set_val1,
-  input dec1,
-
-  output logic q_is_zero1 = 1'b0,
-
-
-  input clk2,
-  input nrst2,
-
-  input set2,
-  input [`WIDTH-1:0] set_val2,
-  input dec2,
-
-  output logic q_is_zero2 = 1'b0
-);
-
-
-logic [`WIDTH-1:0] std_cntr = '0;
-always_ff @(posedge clk1) begin
-  if( set1 || nrst1 ) begin
-    std_cntr[`WIDTH-1:0] <= set_val1[`WIDTH-1:0];
-  end else if( dec1 ) begin
-    std_cntr[`WIDTH-1:0] <= std_cntr[`WIDTH-1:0] - 1'b1;
-  end
-end
-
-//registering all outputs
-always_ff @(posedge clk1) begin
-  if( ~nrst1 ) begin
-    q_is_zero1 <= 1'b0;
-  end else begin
-    q_is_zero1 <= (std_cntr[`WIDTH-1:0] == '0);
-  end
-end
-
-
-logic qz;
-fast_counter #(
-  .WIDTH( `WIDTH )
-) fc (
-  .clk( clk2 ),
-
-  .set( set2 || nrst2 ),
-  .set_val( set_val2 ),
-  .dec( dec2 ),
-  // no value output
-  .q_is_zero( qz )
+module main #(
+  parameter int WIDTH  = 256
+)(
+  input logic clk,
+  input logic rst_n,
+  
+  input  logic [`WIDTH-1:0] data_i,
+  output logic [`WIDTH-1:0] data_o,
 );
 
 //registering all outputs
-always_ff @(posedge clk1) begin
-  if( ~nrst2 ) begin
-    q_is_zero2 <= 1'b0;
-  end else begin
-    q_is_zero2 <= qz;
-  end
+logic [`WIDTH-1:0] data_i_reg;
+always_ff @(posedge clk) begin
+  data_i_reg [`WIDTH-1:0] <= data_i[`WIDTH-1:0];
 end
 
+logic [`WIDTH-1:0] data_o_reg;
+
+dut dut_inst (
+  .clk  ( clk ),
+  .rst_n( rst_n ),
+  .data_i( data_i_reg ),
+  .data_o( data_o_reg )
+);
+
+//registering all outputs
+always_ff @(posedge clk) begin
+  data_o [`WIDTH-1:0] <= data_o_reg [`WIDTH-1:0];
+end
 
 endmodule
+

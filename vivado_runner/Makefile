@@ -59,27 +59,25 @@ fmax.csv: ${JOBS}
 	echo '# FMAX summary report for iterative compilation' > fmax.csv; \
 	echo 'var, clk1, clk2' >> fmax.csv; \
 	export BC_LINE_LENGTH=0; \
-	v=$(VAR_START);	while [ "$$v" -le $(VAR_STOP) ]; do \
-		echo $$v | xargs echo -n >> fmax.csv; \
+	for job in $(JOBS); do \
+		echo $$job | xargs echo -n >> fmax.csv; \
 		echo -n ', ' >> fmax.csv; \
-		(cat ./$$v/test.runs/impl_1/main_timing_summary_routed.rpt | \
+		(cat ./$$job/test.runs/impl_1/main_timing_summary_routed.rpt | \
 			grep -A6 '| Intra Clock Table' | tail -n1 | gawk {'print $$2'} | \
 			xargs echo -n '1000/(1-'; echo ')') | bc | xargs echo -n >> fmax.csv; \
 		echo -n ', ' >> fmax.csv; \
-		(cat ./$$v/test.runs/impl_1/main_timing_summary_routed.rpt | \
+		(cat ./$$job/test.runs/impl_1/main_timing_summary_routed.rpt | \
 			grep -A7 '| Intra Clock Table' | tail -n1 | gawk {'print $$2'} | \
 			xargs echo -n '1000/(1-'; echo ')') | bc | xargs echo -n >> fmax.csv; \
 		echo >> fmax.csv; \
-		v=$$((v+1)); \
 	done
 
 report: fmax.csv
 	cat fmax.csv
 
 clean:
-	v=$(VAR_START);	while [ "$$v" -le $(VAR_STOP) ]; do \
-		rm -rfv $$v; \
+	for job in $(JOBS); do \
+		rm -rfv $$job; \
 		rm -rfv fmax.csv; \
-		v=$$((v+1)); \
 	done
 
