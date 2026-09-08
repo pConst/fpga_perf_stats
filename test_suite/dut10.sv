@@ -112,7 +112,7 @@ module dut (
   spi_transmitter(
     .clk      ( clk          ),
     .rst_n    ( rst_n        ),
-    ,tx_data, ( data_i[63:0] ),
+    .tx_data  ( data_i[63:0] ),
     .tx_valid ( data_i[64]   ),
     .tx_ready ( data_o[0]    ),
     .spi_sclk ( data_o[1]    ),

@@ -39,7 +39,7 @@ PARTS = xc7s100fgga676-2 \
 VAR1 = $(shell seq $(DUT_START) $(DUT_STOP))
 VAR2 = $(shell seq $(PART_START) $(PART_STOP))
 
-JOBS = $(foreach v1, $(VAR1), $(foreach v2, $(VAR2), job_$(v1)_$(v2)))
+JOBS = $(foreach v1, $(VAR1), $(foreach v2, $(VAR2), $(v1)_$(v2)))
 
 
 .PHONY: all report clean
@@ -48,19 +48,19 @@ JOBS = $(foreach v1, $(VAR1), $(foreach v2, $(VAR2), job_$(v1)_$(v2)))
 all: report
 	echo '$@ success'
 
-${JOBS}: job_%:
+${JOBS}: %:
 	V1=$$(echo $* | cut -d'_' -f1); \
 	V2=$$(echo $* | cut -d'_' -f2); \
 	PART=$$(echo "$(PARTS)" | awk -v idx="$$V2" '{print $$idx}'); \
 	echo "==> Запуск job_$*: V1 = $$V1, V2 = $$V2, PART = $$PART"; \
 	mkdir -p ./$*; \
 	cp -r ./base/* ./$*; \
-	cp "../test_suite/dut$$V2.sv" ./$*/src/dut.sv; \
+	cp "../test_suite/dut$$V1.sv" ./$*/src/dut.sv; \
 	$(MAKE) -C ./$* PART=$$PART all
 
 fmax.csv: ${JOBS}
 	echo '# FMAX summary report for iterative compilation' > fmax.csv; \
-	echo 'var, clk1, clk2' >> fmax.csv; \
+	echo 'var, clk' >> fmax.csv; \
 	export BC_LINE_LENGTH=0; \
 	for job in $(JOBS); do \
 		echo $$job | xargs echo -n >> fmax.csv; \

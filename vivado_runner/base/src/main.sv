@@ -1,5 +1,5 @@
 
-`define WIDTH  = 256
+`define WIDTH 256
 
 module main (
   input logic clk,
