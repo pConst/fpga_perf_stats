@@ -2,22 +2,6 @@
 // LSFR with reset
 // polynamial x^8 + x^6 + x^5 + x^4 + 1
 
-module dut #(
-    input  logic         clk,
-    input  logic         rst_n,
-    input  logic [255:0] data_i,
-    output logic [255:0] data_o
-);
-
-  lsfr(
-    .clk   ( clk    ),
-    .rst_n ( rst_n  ),
-    .data_o( data_o )
-  );
-
-endmodule
-
-
 module lsfr #(
     parameter int WIDTH = 8,
     parameter bit [WIDTH-1:0] POLYNOMIAL = 8'b10110001,
@@ -44,6 +28,22 @@ module lsfr #(
 
     // Выходное значение
     assign data_o = lfsr_reg;
+
+endmodule
+
+
+module dut (
+    input  logic         clk,
+    input  logic         rst_n,
+    input  logic [255:0] data_i,
+    output logic [255:0] data_o
+);
+
+  lsfr(
+    .clk   ( clk    ),
+    .rst_n ( rst_n  ),
+    .data_o( data_o )
+  );
 
 endmodule
 

@@ -1,24 +1,7 @@
 
 // shift register w/o rst
 
-module dut #(
-    input  logic         clk,
-    input  logic         rst_n,
-    input  logic [255:0] data_i,
-    output logic [255:0] data_o
-);
-
-  delay(
-    .clk   ( clk    ),
-    .rst_n (        ),
-    .data_i( data_i ),
-    .data_o( data_o )
-  );
-
-endmodule
-
-
-module dalay #(
+module delay #(
     parameter int LENGTH = 8,
     parameter int WIDTH = 32
 )(
@@ -37,6 +20,22 @@ module dalay #(
   end
 
   assign data_o = shift_reg[LENGTH-1];
+
+endmodule
+
+
+module dut (
+    input  logic         clk,
+    input  logic         rst_n,
+    input  logic [255:0] data_i,
+    output logic [255:0] data_o
+);
+
+  delay(
+    .clk   ( clk    ),
+    .data_i( data_i ),
+    .data_o( data_o )
+  );
 
 endmodule
 

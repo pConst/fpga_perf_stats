@@ -1,24 +1,6 @@
 
 // dynamic delay = 8 tap delay + output demultiplexer
 
-module dut #(
-    input  logic         clk,
-    input  logic         rst_n,
-    input  logic [255:0] data_i,
-    output logic [255:0] data_o
-);
-
-  dynamic_delay_8(
-    .clk          ( clk           ),
-    .rst_n        ( rst_n         ),
-    .delay_select ( data_i[63:32] ),
-    .data         ( data_i[31:0]  ),
-    .data_o       ( data_o[31:0]  )
-  );
-
-endmodule
-
-
 module dynamic_delay_8 #(
   parameter int LENGTH = 8,
   parameter int WIDTH  = 32,
@@ -47,6 +29,24 @@ module dynamic_delay_8 #(
   end
 
   assign data_o = shift_reg[delay_select];
+
+endmodule
+
+
+module dut (
+    input  logic         clk,
+    input  logic         rst_n,
+    input  logic [255:0] data_i,
+    output logic [255:0] data_o
+);
+
+  dynamic_delay_8(
+    .clk          ( clk           ),
+    .rst_n        ( rst_n         ),
+    .delay_select ( data_i[63:32] ),
+    .data_i       ( data_i[31:0]  ),
+    .data_o       ( data_o[31:0]  )
+  );
 
 endmodule
 

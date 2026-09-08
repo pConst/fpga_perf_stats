@@ -1,24 +1,6 @@
 
 // 128 bit binary counter with reset and parallel load
 
-module dut #(
-    input  logic         clk,
-    input  logic         rst_n,
-    input  logic [255:0] data_i,
-    output logic [255:0] data_o
-);
-
-  counter_128bit(
-    .clk   ( clk          ),
-    .rst_n ( rst_n        ),
-    .load  ( data_i       ),
-    .data  ( data_i[128]   ),
-    .data_o( data_o[127:0] )
-  );
-
-endmodule
-
-
 module counter_128bit #(
     parameter int WIDTH = 128
 )(
@@ -40,3 +22,22 @@ module counter_128bit #(
   end
 
 endmodule
+
+
+module dut (
+    input  logic         clk,
+    input  logic         rst_n,
+    input  logic [255:0] data_i,
+    output logic [255:0] data_o
+);
+
+  counter_128bit(
+    .clk   ( clk           ),
+    .rst_n ( rst_n         ),
+    .load  ( data_i[128]   ),
+    .data  ( data_i[127:0] ),
+    .count ( data_o[127:0] )
+  );
+
+endmodule
+

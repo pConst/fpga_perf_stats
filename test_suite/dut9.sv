@@ -1,24 +1,6 @@
 
 // typical UART receiver
 
-module dut #(
-    input  logic         clk,
-    input  logic         rst_n,
-    input  logic [255:0] data_i,
-    output logic [255:0] data_o
-);
-
-  uart_rx(
-    .clk          ( clk         ),
-    .rst_n        ( rst_n       ),
-    .rx           ( data_i[7:0] ),
-    .rx_data      ( data_o[7:0] ),
-    .rx_valid     ( data_o[8]   )
-  );
-
-endmodule
-
-
 module uart_rx #(
   parameter CLK_FREQ_HZ = 50_000_000,
   parameter BAUD_RATE   = 115_200
@@ -140,6 +122,24 @@ module uart_rx #(
       end
     end
   end
+
+endmodule
+
+
+module dut (
+    input  logic         clk,
+    input  logic         rst_n,
+    input  logic [255:0] data_i,
+    output logic [255:0] data_o
+);
+
+  uart_rx(
+    .clk          ( clk         ),
+    .rst_n        ( rst_n       ),
+    .rx           ( data_i[7:0] ),
+    .rx_data      ( data_o[7:0] ),
+    .rx_valid     ( data_o[8]   )
+  );
 
 endmodule
 

@@ -1,27 +1,6 @@
 
 // typical SPI transmitter
 
-module dut #(
-    input  logic         clk,
-    input  logic         rst_n,
-    input  logic [255:0] data_i,
-    output logic [255:0] data_o
-);
-
-  spi_transmitter(
-    .clk      ( clk          ),
-    .rst_n    ( rst_n        ),
-    ,tx_data, ( data_i[63:0] ),
-    .tx_valid ( data_i[64]   ),
-    .tx_ready ( data_o[0]    ),
-    .spi_sclk ( data_o[1]    ),
-    .spi_mosi ( data_o[2]    ),
-    .spi_ss_n ( data_o[3]    )
-  );
-
-endmodule
-
-
 module spi_transmitter #(
   parameter int DATA_WIDTH = 64
 )(
@@ -119,6 +98,27 @@ module spi_transmitter #(
       endcase
     end
   end
+
+endmodule
+
+
+module dut (
+    input  logic         clk,
+    input  logic         rst_n,
+    input  logic [255:0] data_i,
+    output logic [255:0] data_o
+);
+
+  spi_transmitter(
+    .clk      ( clk          ),
+    .rst_n    ( rst_n        ),
+    ,tx_data, ( data_i[63:0] ),
+    .tx_valid ( data_i[64]   ),
+    .tx_ready ( data_o[0]    ),
+    .spi_sclk ( data_o[1]    ),
+    .spi_mosi ( data_o[2]    ),
+    .spi_ss_n ( data_o[3]    )
+  );
 
 endmodule
 
