@@ -1,12 +1,12 @@
 
-module main #(
-  parameter int WIDTH  = 256
-)(
+`define WIDTH  = 256
+
+module main (
   input logic clk,
   input logic rst_n,
   
   input  logic [`WIDTH-1:0] data_i,
-  output logic [`WIDTH-1:0] data_o,
+  output logic [`WIDTH-1:0] data_o
 );
 
 //registering all outputs

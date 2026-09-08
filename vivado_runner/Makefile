@@ -18,11 +18,11 @@
 #
 
 
-DUT_START = 32
-DUT_STOP  = 33
+DUT_START = 1
+DUT_STOP  = 10
 
 PART_START = 1
-PART_STOP  = 8
+PART_STOP  = 11
 
 PARTS = xc7s100fgga676-2 \
 	xc7a200tffv1156-2 \
@@ -30,8 +30,11 @@ PARTS = xc7s100fgga676-2 \
 	xc7vx330tffv1761-2 \
 	xcku040-ffva1156-2-i \
 	xcvu065-ffvc1517-2-i \
+	xcsu35p-sbvb625-2-i \
+	xcau25p-sfvb784-2-i \
 	xcku9p-ffve900-2-i \
-	xcvu3p-ffvc1517-2-i
+	xcvu3p-ffvc1517-2-i \
+	xcvm1102-sfva784-2MP-i-S
 
 VAR1 = $(shell seq $(DUT_START) $(DUT_STOP))
 VAR2 = $(shell seq $(PART_START) $(PART_STOP))
@@ -52,7 +55,7 @@ ${JOBS}: job_%:
 	echo "==> Запуск job_$*: V1 = $$V1, V2 = $$V2, PART = $$PART"; \
 	mkdir -p ./$*; \
 	cp -r ./base/* ./$*; \
-	cp "../test_suite/dut$$V2.sv" ./$*; \
+	cp "../test_suite/dut$$V2.sv" ./$*/src/dut.sv; \
 	$(MAKE) -C ./$* PART=$$PART all
 
 fmax.csv: ${JOBS}
@@ -78,6 +81,6 @@ report: fmax.csv
 clean:
 	for job in $(JOBS); do \
 		rm -rfv $$job; \
-		rm -rfv fmax.csv; \
-	done
+	done \
+	rm -rfv fmax.csv;
 
