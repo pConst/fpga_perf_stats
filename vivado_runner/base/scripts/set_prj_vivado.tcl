@@ -46,10 +46,10 @@ if {${scripts} ne ""} {
   add_files -fileset utils_1 ${scripts}
 }
 
-set aup_script "scripts/allow_undefined_ports.tcl"
-if {${aup_script} in ${scripts}} {
-  set_property STEPS.WRITE_BITSTREAM.TCL.PRE [get_files ${aup_script} -of [get_fileset utils_1]] [get_runs impl_1]
-}
+#set aup_script "scripts/allow_undefined_ports.tcl"
+#if {${aup_script} in ${scripts}} {
+#  set_property STEPS.WRITE_BITSTREAM.TCL.PRE [get_files ${aup_script} -of [get_fileset utils_1]] [get_runs impl_1]
+#}
 
 exec touch .setup.done
 

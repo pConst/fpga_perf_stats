@@ -66,11 +66,7 @@ fmax.csv: ${JOBS}
 		echo $$job | xargs echo -n >> fmax.csv; \
 		echo -n ', ' >> fmax.csv; \
 		(cat ./$$job/test.runs/impl_1/main_timing_summary_routed.rpt | \
-			grep -A6 '| Intra Clock Table' | tail -n1 | gawk {'print $$2'} | \
-			xargs echo -n '1000/(1-'; echo ')') | bc | xargs echo -n >> fmax.csv; \
-		echo -n ', ' >> fmax.csv; \
-		(cat ./$$job/test.runs/impl_1/main_timing_summary_routed.rpt | \
-			grep -A7 '| Intra Clock Table' | tail -n1 | gawk {'print $$2'} | \
+			grep -A6 'Design Timing Summary' | tail -n1 | gawk {'print $$1'} | \
 			xargs echo -n '1000/(1-'; echo ')') | bc | xargs echo -n >> fmax.csv; \
 		echo >> fmax.csv; \
 	done
