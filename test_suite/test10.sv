@@ -102,7 +102,7 @@ module spi_transmitter #(
 endmodule
 
 
-module dut (
+module test (
     input  logic         clk,
     input  logic         rst_n,
     input  logic [255:0] data_i,

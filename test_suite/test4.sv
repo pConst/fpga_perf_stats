@@ -11,7 +11,7 @@ module counter_32bit #(
     output logic [WIDTH-1:0] count
 );
 
-  always_ff @(posedge clk) begin
+  always_ff @(posedge clk or negedge rst_n) begin
     if (!rst_n) begin
       count <= '0;
     end else if (load) begin
@@ -24,7 +24,7 @@ module counter_32bit #(
 endmodule
 
 
-module dut (
+module test (
     input  logic         clk,
     input  logic         rst_n,
     input  logic [255:0] data_i,

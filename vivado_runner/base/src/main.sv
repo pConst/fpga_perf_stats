@@ -5,29 +5,35 @@ module main (
   input logic clk,
   input logic rst_n,
   
-  input  logic [`WIDTH-1:0] data_i,
-  output logic [`WIDTH-1:0] data_o
+  input  logic data_i,
+  output logic data_o
 );
 
-//registering all outputs
-logic [`WIDTH-1:0] data_i_reg;
+
+// input shifter
+(* DONT_TOUCH = "TRUE" *) logic rst_n_reg;
+(* DONT_TOUCH = "TRUE" *) logic [`WIDTH-1:0] data_i_shift;
 always_ff @(posedge clk) begin
-  data_i_reg [`WIDTH-1:0] <= data_i[`WIDTH-1:0];
+  rst_n_reg <= rst_n;
+  data_i_shift[`WIDTH-1:0] <= {data_i_shift[`WIDTH-1-1:0], data_i};
 end
 
-logic [`WIDTH-1:0] data_o_reg;
+logic [`WIDTH-1:0] data_o_wire;
 
-dut dut_inst (
-  .clk  ( clk ),
-  .rst_n( rst_n ),
-  .data_i( data_i_reg ),
-  .data_o( data_o_reg )
+test test_inst (
+  .clk   ( clk          ),
+  .rst_n ( rst_n_reg    ),
+  .data_i( data_i_shift ),
+  .data_o( data_o_wire  )
 );
 
-//registering all outputs
+// output shifter
+(* DONT_TOUCH = "TRUE" *) logic [`WIDTH-1:0] data_o_reg;
 always_ff @(posedge clk) begin
-  data_o [`WIDTH-1:0] <= data_o_reg [`WIDTH-1:0];
+  data_o_reg[`WIDTH-1:0] <= data_o_wire[`WIDTH-1:0];
 end
+
+assign data_o = ^data_o_reg[`WIDTH-1:0];
 
 endmodule
 

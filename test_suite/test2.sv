@@ -12,27 +12,26 @@ module lsfr #(
     output logic [WIDTH-1:0] data_o
 );
 
-    logic [WIDTH-1:0] lfsr_reg = SEED;
+    logic [WIDTH-1:0] lfsr_reg;
 
     always_ff @(posedge clk or negedge rst_n) begin
       if (!rst_n) begin
         lfsr_reg <= SEED;
       end else begin
         if (lfsr_reg[0]) begin
-            lfsr_reg <= (lfsr_reg >> 1) ^ POLYNOMIAL;
+          lfsr_reg <= (lfsr_reg >> 1) ^ POLYNOMIAL;
         end else begin
-            lfsr_reg <= (lfsr_reg >> 1);
+          lfsr_reg <= (lfsr_reg >> 1);
         end
       end
     end
 
-    // Выходное значение
     assign data_o = lfsr_reg;
 
 endmodule
 
 
-module dut (
+module test (
     input  logic         clk,
     input  logic         rst_n,
     input  logic [255:0] data_i,

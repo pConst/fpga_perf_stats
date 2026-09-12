@@ -6,11 +6,11 @@
 
 PROJ = test
 
-# expecting this part will be overriden
+# expecting this variable to be overriden
 PART = xc7s100fgga676-2
 
 SRCS = src/main.sv \
-       src/dut.sv
+       src/test.sv
 
 XDCS = src/timing.xdc
 

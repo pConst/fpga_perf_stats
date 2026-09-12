@@ -1,8 +1,8 @@
 
-// dynamic delay = 32 tap delay + output demultiplexer
+// dynamic delay = 8 tap delay + output demultiplexer
 
-module dynamic_delay_32 #(
-  parameter int LENGTH = 32,
+module dynamic_delay_8 #(
+  parameter int LENGTH = 8,
   parameter int WIDTH  = 32,
   parameter int ADDR_W = $clog2(LENGTH)
 )(
@@ -33,14 +33,14 @@ module dynamic_delay_32 #(
 endmodule
 
 
-module dut (
+module test (
     input  logic         clk,
     input  logic         rst_n,
     input  logic [255:0] data_i,
     output logic [255:0] data_o
 );
 
-  dynamic_delay_32(
+  dynamic_delay_8(
     .clk          ( clk           ),
     .rst_n        ( rst_n         ),
     .delay_select ( data_i[63:32] ),

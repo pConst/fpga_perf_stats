@@ -1,8 +1,8 @@
 
-// 128 bit binary counter with reset and parallel load
+// 8 bit binary counter with reset and parallel load
 
-module counter_128bit #(
-    parameter int WIDTH = 128
+module counter_8bit #(
+    parameter int WIDTH = 8
 )(
     input  logic             clk,
     input  logic             rst_n,
@@ -11,7 +11,7 @@ module counter_128bit #(
     output logic [WIDTH-1:0] count
 );
 
-  always_ff @(posedge clk) begin
+  always_ff @(posedge clk or negedge rst_n) begin
     if (!rst_n) begin
       count <= '0;
     end else if (load) begin
@@ -24,19 +24,19 @@ module counter_128bit #(
 endmodule
 
 
-module dut (
+module test (
     input  logic         clk,
     input  logic         rst_n,
     input  logic [255:0] data_i,
     output logic [255:0] data_o
 );
 
-  counter_128bit(
-    .clk   ( clk           ),
-    .rst_n ( rst_n         ),
-    .load  ( data_i[128]   ),
-    .data  ( data_i[127:0] ),
-    .count ( data_o[127:0] )
+  counter_8bit(
+    .clk   ( clk          ),
+    .rst_n ( rst_n        ),
+    .load  ( data_i[32]   ),
+    .data  ( data_i[31:0] ),
+    .count ( data_o[31:0] )
   );
 
 endmodule
