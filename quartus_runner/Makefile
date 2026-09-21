@@ -7,7 +7,6 @@
 #
 #
 # INFO ------------------------------------------------------------------------
-#
 # - This is a top-level Makefile
 # - It makes a bunch of Quartus project copies which differ only one variable
 # - Then it compiles all projects in parallel and collects FMAX data
@@ -19,52 +18,64 @@
 #
 
 
-DUT_START = 32
-DUT_STOP  = 33
+DUT_START = 1
+DUT_STOP  = 10
 
 PART_START = 1
-PART_STOP  = 8
+PART_STOP  = 7
 
-PARTS = xc7s100fgga676-2 \
-	xc7a200tffv1156-2 \
-	xc7k325tffv900-2 \
-	xc7vx330tffv1761-2 \
-	xcku040-ffva1156-2-i \
-	xcvu065-ffvc1517-2-i \
-	xcku9p-ffve900-2-i \
-	xcvu3p-ffvc1517-2-i
+FAMILIES = \
+MAX_10 \
+Cyclone_IV_E \
+Cyclone_V \
+Cyclone_10_LP \
+Arria_V \
+Arria_10 \
+Stratix_V 
+
+DEVICES = \
+10M50DDF672I7G \
+EP4CE115F29I7 \
+5CEFA7F31I7 \
+10CL120YF780I7G \
+5AGXMB3G4F40I5 \
+10AX032H2F35I2SG \
+5SGXMB5R2F43I2
 
 VAR1 = $(shell seq $(DUT_START) $(DUT_STOP))
 VAR2 = $(shell seq $(PART_START) $(PART_STOP))
 
-JOBS = $(foreach v1, $(VAR1), $(foreach v2, $(VAR2), job_$(v1)_$(v2)))
+JOBS = $(foreach v1, $(VAR1), $(foreach v2, $(VAR2), $(v1)_$(v2)))
 
 
 .PHONY: all report clean
 
 
-all: fmax
+all: report
 	echo '$@ success'
 
-${JOBS}: job_%:
+${JOBS}: %:
 	V1=$$(echo $* | cut -d'_' -f1); \
 	V2=$$(echo $* | cut -d'_' -f2); \
-	PART=$$(echo "$(PARTS)" | awk -v idx="$$V2" '{print $$idx}'); \
-	echo "==> Запуск job_$*: V1 = $$V1, V2 = $$V2, PART = $$PART"; \
+	FAMILY=$$(echo "$(FAMILIES)" | awk -v idx="$$V2" '{print $$idx}' | awk '{ gsub(/_/, " "); print }'); \
+	DEVICE=$$(echo  "$(DEVICES)" | awk -v idx="$$V2" '{print $$idx}' | awk '{ gsub(/_/, " "); print }'); \
+	echo "==> Запуск job_$*: V1 = $$V1, V2 = $$V2, FAMILY=$$FAMILY, DEVICE = $$DEVICE"; \
 	mkdir -p ./$*; \
 	cp -r ./base/* ./$*; \
-	cp "../test_suite/dut$$V2.sv" ./$*; \
-	$(MAKE) -C ./$* PART=$$PART stap
+	echo "set_global_assignment -name FAMILY \"$$FAMILY\"" > ./$*/family_device.qsf; \
+	echo "set_global_assignment -name DEVICE \"$$DEVICE\"" >> ./$*/family_device.qsf; \
+	cp "../test_suite/test$$V1.sv" ./$*/test.sv; \
+	$(MAKE) -C ./$* stap
 
-fmax: ${JOBS}
+report: ${JOBS}
 	echo '# FMAX summary report for iterative compilation' > fmax.csv; \
-	echo 'var, clk1, clk2' >> fmax.csv; \
+	echo 'job, fmax, restricted_fmax' >> fmax.csv; \
 	v=$(VAR_START);	while [ "$$v" -le $(VAR_STOP) ]; do \
 		echo $$v | xargs echo -n >> fmax.csv; \
 		echo -n ', ' >> fmax.csv; \
 		cat ./$$v/OUTPUT/test.sta.rpt | \
 		grep -A3 '; Fmax       ; Restricted Fmax ; Clock Name ; Note ;' | \
-		tail -n1 | gawk {'print $$5'} | xargs echo -n >> fmax.csv; \
+		tail -n1 | gawk {'print $$2'} | xargs echo -n >> fmax.csv; \
 		echo -n ', ' >> fmax.csv; \
 		cat ./$$v/OUTPUT/test.sta.rpt | \
 		grep -A2 '; Fmax       ; Restricted Fmax ; Clock Name ; Note ;' | \
@@ -73,13 +84,10 @@ fmax: ${JOBS}
 		v=$$((v+1)); \
 	done
 
-report: fmax.csv
-	cat fmax.csv
-
 clean:
-	v=$(VAR_START);	while [ "$$v" -le $(VAR_STOP) ]; do \
-		rm -rfv $$v; \
-		rm -rfv fmax.csv; \
-		v=$$((v+1)); \
-	done
+	for job in $(JOBS); do \
+		rm -rfv $$job; \
+	done \
+	rm -rfv fmax.csv; \
+	rm -rfv util.csv
 

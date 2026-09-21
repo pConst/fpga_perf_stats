@@ -31,7 +31,7 @@
 PROJ_DIR = $(shell pwd)
 PROJ = $(shell ls -1 *.qpf | tail -n1 | awk '{ gsub(".qpf","") } 1' )
 #SRCS = $(shell ls -R1 SOURCE/*.{v,sv,vh,sdc,tcl,hex,bin} 2>/dev/null | grep -v ':' )
-SRCS = $(shell ls -R1 SOURCE/* )
+SRCS = $(shell ls -R1 ./* )
 
 QPF = $(PROJ).qpf
 QSF = $(PROJ).qsf
@@ -88,10 +88,6 @@ $(FIT_REPORT): $(MAP_REPORT)
 	$(QUARTUS_DIR)quartus_fit --no_banner \
 	            --read_settings_files=on \
 	            --write_settings_files=off \
-	            --inner_num=1 \
-	            --one_fit_attempt=on \
-	            --pack_register=off \
-	            --effort=fast \
 	            --64bit $(PROJ) -c $(PROJ)
 	# using --io_smart_recompile for secondary fitter launches is tricky
 fit: $(FIT_REPORT)
