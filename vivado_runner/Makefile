@@ -68,7 +68,7 @@ report: ${JOBS}
 		echo -n ', ' >> fmax.csv; \
 		(cat ./$$job/test.runs/impl_1/main_timing_summary_routed.rpt | \
 			grep -A6 'Design Timing Summary' | tail -n1 | gawk {'print $$1'} | \
-			xargs echo -n '1000/(1-'; echo ')') | bc | xargs echo -n >> fmax.csv; \
+			xargs echo -n '1000/(0.5-'; echo ')') | bc | xargs echo -n >> fmax.csv; \
 		echo >> fmax.csv; \
 	done; \
 	echo '# UTIL summary report for iterative compilation' > util.csv; \
