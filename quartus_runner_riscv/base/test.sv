@@ -16,7 +16,6 @@ module test (
     .tapc_trst_n          ( rst_n           ),
     .test_rst_n           ( rst_n           ),
 
-    .core_irq_ext_i       ( data_i[0]       ),
     .core_irq_mtimer_i    ( data_i[1]       ),
     .core_irq_soft_i      ( data_i[2]       ),
     .dmem2core_req_ack_i  ( data_i[3]       ),
@@ -31,8 +30,8 @@ module test (
     .imem2core_rdata_i    ( data_i[255:128] ),
     .core_fuse_mhartid_i  ( data_i[255:160] ),
     .core_irq_lines_i     ( data_i[255:192] ),
-    .dmem2core_resp_i     ( data_i[255:34]  ),
-    .imem2core_resp_i     ( data_i[255:36]  ),
+    .dmem2core_resp_i     ( type_scr1_mem_resp_e'(data_i[252:250])  ),
+    .imem2core_resp_i     ( type_scr1_mem_resp_e'(data_i[255:253])  ),
 
     .core2dmem_req_o      ( data_o[0]       ),
     .core2imem_req_o      ( data_o[1]       ),

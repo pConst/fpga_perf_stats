@@ -69,18 +69,18 @@ ${JOBS}: %:
 report: ${JOBS}
 	echo '# FMAX summary report for iterative compilation' > fmax.csv; \
 	echo 'job, fmax, restricted_fmax' >> fmax.csv; \
-	v=$(VAR_START);	while [ "$$v" -le $(VAR_STOP) ]; do \
-		echo $$v | xargs echo -n >> fmax.csv; \
+	export BC_LINE_LENGTH=0; \
+	for job in $(JOBS); do \
+		echo $$job | xargs echo -n >> fmax.csv; \
 		echo -n ', ' >> fmax.csv; \
-		cat ./$$v/OUTPUT/test.sta.rpt | \
-		grep -A3 '; Fmax       ; Restricted Fmax ; Clock Name ; Note ;' | \
+		cat ./$$job/OUTPUT/test.sta.rpt | \
+		grep -A2 'Restricted Fmax' | \
 		tail -n1 | gawk {'print $$2'} | xargs echo -n >> fmax.csv; \
 		echo -n ', ' >> fmax.csv; \
-		cat ./$$v/OUTPUT/test.sta.rpt | \
-		grep -A2 '; Fmax       ; Restricted Fmax ; Clock Name ; Note ;' | \
+		cat ./$$job//OUTPUT/test.sta.rpt | \
+		grep -A2 'Restricted Fmax' | \
 		tail -n1 | gawk {'print $$5'} | xargs echo -n >> fmax.csv; \
 		echo >> fmax.csv; \
-		v=$$((v+1)); \
 	done
 
 clean:
