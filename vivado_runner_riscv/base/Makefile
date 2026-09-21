@@ -9,8 +9,44 @@ PROJ = test
 # expecting this variable to be overriden
 PART = xc7s100fgga676-2
 
-SRCS = src/main.sv \
-       src/test.sv
+SRCS = scr1/scr1_ahb.svh \
+scr1/scr1_arch_description.svh \
+scr1/scr1_arch_types.svh \
+scr1/scr1_cg.sv \
+scr1/scr1_clk_ctrl.sv \
+scr1/scr1_core_top.sv \
+scr1/scr1_csr.svh \
+scr1/scr1_dmi.sv \
+scr1/scr1_dm.sv \
+scr1/scr1_dm.svh \
+scr1/scr1_dp_memory.sv \
+scr1/scr1_hdu.svh \
+scr1/scr1_ipic.sv \
+scr1/scr1_ipic.svh \
+scr1/scr1_mem_axi.sv \
+scr1/scr1_memif.svh \
+scr1/scr1_pipe_csr.sv \
+scr1/scr1_pipe_exu.sv \
+scr1/scr1_pipe_hdu.sv \
+scr1/scr1_pipe_ialu.sv \
+scr1/scr1_pipe_idu.sv \
+scr1/scr1_pipe_ifu.sv \
+scr1/scr1_pipe_lsu.sv \
+scr1/scr1_pipe_mprf.sv \
+scr1/scr1_pipe_tdu.sv \
+scr1/scr1_pipe_top.sv \
+scr1/scr1_reset_cells.sv \
+scr1/scr1_riscv_isa_decoding.svh \
+scr1/scr1_scu.sv \
+scr1/scr1_scu.svh \
+scr1/scr1_search_ms1.svh \
+scr1/scr1_tapc_shift_reg.sv \
+scr1/scr1_tapc.sv \
+scr1/scr1_tapc.svh \
+scr1/scr1_tapc_synchronizer.sv \
+scr1/scr1_tdu.svh \
+src/test.sv \
+src/main.sv
 
 XDCS = src/timing.xdc
 

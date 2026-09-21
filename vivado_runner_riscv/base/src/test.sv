@@ -16,7 +16,6 @@ module test (
     .tapc_trst_n          ( rst_n           ),
     .test_rst_n           ( rst_n           ),
 
-    .core_irq_ext_i       ( data_i[0]       ),
     .core_irq_mtimer_i    ( data_i[1]       ),
     .core_irq_soft_i      ( data_i[2]       ),
     .dmem2core_req_ack_i  ( data_i[3]       ),
