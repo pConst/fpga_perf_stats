@@ -19,7 +19,7 @@
 
 
 DUT_START = 1
-DUT_STOP  = 10
+DUT_STOP  = 1
 
 PART_START = 1
 PART_STOP  = 11
@@ -56,7 +56,6 @@ ${JOBS}: %:
 	echo "==> Запуск job_$*: V1 = $$V1, V2 = $$V2, PART = $$PART"; \
 	mkdir -p ./$*; \
 	cp -r ./base/* ./$*; \
-	cp "../test_suite/test$$V1.sv" ./$*/src/test.sv; \
 	$(MAKE) -C ./$* PART=$$PART all
 
 report: ${JOBS}
@@ -68,7 +67,7 @@ report: ${JOBS}
 		echo -n ', ' >> fmax.csv; \
 		(cat ./$$job/test.runs/impl_1/main_timing_summary_routed.rpt | \
 			grep -A6 'Design Timing Summary' | tail -n1 | gawk {'print $$1'} | \
-			xargs echo -n '1000/(1-'; echo ')') | bc | xargs echo -n >> fmax.csv; \
+			xargs echo -n '1000/(0.5-'; echo ')') | bc | xargs echo -n >> fmax.csv; \
 		echo >> fmax.csv; \
 	done; \
 	echo '# UTIL summary report for iterative compilation' > util.csv; \
