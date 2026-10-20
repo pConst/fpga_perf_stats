@@ -1,0 +1,21 @@
+
+# set_global_assignment -name FAMILY "Cyclone V"
+# set_global_assignment -name DEVICE 5CGXFC4C7F27C8
+source family_device.qsf
+set_global_assignment -name ORIGINAL_QUARTUS_VERSION 25.1.0
+set_global_assignment -name LAST_QUARTUS_VERSION "25.1.0 Pro Edition"
+
+set_global_assignment -name TOP_LEVEL_ENTITY main
+set_global_assignment -name PROJECT_OUTPUT_DIRECTORY OUTPUT
+set_global_assignment -name NUM_PARALLEL_PROCESSORS ALL
+set_global_assignment -name FITTER_EFFORT "STANDARD FIT"
+
+
+set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
+set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
+set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
+
+
+set_global_assignment -name SYSTEMVERILOG_FILE main.sv
+set_global_assignment -name SYSTEMVERILOG_FILE test.sv
+set_global_assignment -name SDC_FILE main.sdc
